@@ -32,6 +32,7 @@ public class EmployeePayrollService {
         System.out.println("Enter Employee Salary: ");
         double salary = consoleInputReader.nextDouble();
         employeePayrollList.add(new EmployeePayrollData(id, name, salary));
+        consoleInputReader.close();
     }
 
     public List<EmployeePayrollData> readEmployeePayrollData(IOService ioService) {
