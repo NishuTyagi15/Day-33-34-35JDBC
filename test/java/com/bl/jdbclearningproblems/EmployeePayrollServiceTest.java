@@ -34,4 +34,13 @@ public class EmployeePayrollServiceTest {
                 employeePayrollService.readEmployeePayrollForDateChange(EmployeePayrollService.IOService.DB_IO, startDate, endDate);
         Assertions.assertEquals(3, employeePayrollData.size());
     }
+
+    @Test
+    public void givenNewEmployee_WhenAdded_ShouldSyncWithDB() {
+        EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+        employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
+        employeePayrollService.addEmployeePayrollData("Avneet", 5000000.00, LocalDate.now(), "Male");
+        boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Avneet");
+        Assertions.assertTrue(result);
+    }
 }
