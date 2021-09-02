@@ -3,7 +3,9 @@ package com.bl.jdbclearningproblems;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeePayrollDBService {
 
@@ -50,21 +52,6 @@ public class EmployeePayrollDBService {
         return employeePayrollList;
     }
 
-    public int updateEmployeeData(String name, double salary) {
-        return this.updateEmployeeDataUsingStatement(name, salary);
-    }
-
-    private int updateEmployeeDataUsingStatement(String name, double salary) {
-        String sql = String.format("update employee_payroll set salary = %.2f where name = '%s':" , salary, name);
-        try (Connection connection = this.getConnection()) {
-            Statement statement = connection.createStatement();
-            return statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
     public List<EmployeePayrollData> getEmployeePayrollData(String name) {
         List<EmployeePayrollData> employeePayrollDataList = null;
         if (this.employeePayrollDataStatement == null)
@@ -95,17 +82,6 @@ public class EmployeePayrollDBService {
         return employeePayrollDataList;
     }
 
-    private void prepareStatementForEmployeeData() {
-        try {
-            Connection connection = this.getConnection();
-            String sql = "SELECT * FROM employee_payroll WHERE name = ?";
-            employeePayrollDataStatement = connection.prepareStatement(sql);
-        }catch (SQLException e){
-            e.printStackTrace();
-
-        }
-    }
-
     public List<EmployeePayrollData> getEmployeePayrollForDateRange(LocalDate startDate, LocalDate endDate) {
         String sql = String.format("SELECT * FROM employee_payroll WHERE START BETWEEN '%s' AND '%s';",
                 Date.valueOf(startDate), Date.valueOf(endDate));
@@ -124,5 +100,48 @@ public class EmployeePayrollDBService {
             e.printStackTrace();
         }
         return employeePayrollList;
+    }
+
+    public Map<String, Double> getAverageSalaryByGender() {
+        String sql = "SELECT gender, AVG(salary) as avg_salary FROM employee_payroll WHERE gender = 'Female' GROUP BY gender;\n";
+        Map<String,Double> genderToAverageSalaryMap = new HashMap<>();
+        try (Connection connection = this.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                String gender = resultSet.getString("gender");
+                double salary = resultSet.getDouble("avg_salary");
+                genderToAverageSalaryMap.put(gender, salary);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return genderToAverageSalaryMap;
+    }
+
+    public int updateEmployeeData(String name, double salary) {
+        return this.updateEmployeeDataUsingStatement(name, salary);
+    }
+
+    private int updateEmployeeDataUsingStatement(String name, double salary) {
+        String sql = String.format("update employee_payroll set salary = %.2f where name = '%s':" , salary, name);
+        try (Connection connection = this.getConnection()) {
+            Statement statement = connection.createStatement();
+            return statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private void prepareStatementForEmployeeData() {
+        try {
+            Connection connection = this.getConnection();
+            String sql = "SELECT * FROM employee_payroll WHERE name = ?";
+            employeePayrollDataStatement = connection.prepareStatement(sql);
+        }catch (SQLException e){
+            e.printStackTrace();
+
+        }
     }
 }
