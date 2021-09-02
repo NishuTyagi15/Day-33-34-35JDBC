@@ -83,7 +83,7 @@ public class EmployeePayrollService {
     }
 
     public void addEmployeePayrollData(String name, double salary, LocalDate startDate, String gender) {
-        employeePayrollList.add(employeePayrollDBService.addEmployeeTopayroll(name, salary, startDate, gender));
+        employeePayrollList.add(employeePayrollDBService.addEmployeeToPayrollUC8(name, salary, startDate, gender));
     }
 
     public void writeEmployeePayrollData(IOService ioService) {
