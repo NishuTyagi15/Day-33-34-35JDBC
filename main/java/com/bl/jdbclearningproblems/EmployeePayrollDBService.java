@@ -33,23 +33,7 @@ public class EmployeePayrollDBService {
 
     public List<EmployeePayrollData> readData() {
         String sql = "SELECT * FROM employee_payroll; ";
-        List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
-        try (Connection connection = this.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                double salary = resultSet.getDouble("salary");
-                LocalDate startDate = resultSet.getDate("start").toLocalDate();
-                employeePayrollList.add(new EmployeePayrollData (id, name, salary, startDate));
-            }
-            resultSet.close();
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return employeePayrollList;
+        return this.getEmployeePayrollDataUsingDB(sql);
     }
 
     public List<EmployeePayrollData> getEmployeePayrollData(String name) {

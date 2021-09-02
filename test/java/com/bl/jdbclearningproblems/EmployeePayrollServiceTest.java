@@ -12,7 +12,7 @@ public class EmployeePayrollServiceTest {
     public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount() {
         EmployeePayrollService employeePayrollService = new EmployeePayrollService();
         List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
-        Assertions.assertEquals(4, employeePayrollData.size());
+        Assertions.assertEquals(5, employeePayrollData.size());
     }
 
     @Test
@@ -28,18 +28,10 @@ public class EmployeePayrollServiceTest {
     public void givenDateRange_WhenRetrieved_ShouldMatchEmployeeCount() {
         EmployeePayrollService employeePayrollService = new EmployeePayrollService();
         employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
-        LocalDate startDate = LocalDate.of(2020,02,1);
+        LocalDate startDate = LocalDate.of(2020, 02, 1);
         LocalDate endDate = LocalDate.now();
         List<EmployeePayrollData> employeePayrollData =
-                employeePayrollService.readEmployeePayrollForDateChange(EmployeePayrollService.IOService.DB_IO,startDate,endDate);
-        Assertions.assertEquals(2,employeePayrollData.size());
-    }
-
-    @Test
-    public void givenPayrollData_WhenAverageSalaryRetrieveByGender_ShouldReturnProperValue(){
-        EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-        employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
-        Map<String , Double> averageSalaryByGender = employeePayrollService.readAverageSalaryByGender(EmployeePayrollService.IOService.DB_IO);
-        Assertions.assertTrue(averageSalaryByGender.get("Female").equals(700000));
+                employeePayrollService.readEmployeePayrollForDateChange(EmployeePayrollService.IOService.DB_IO, startDate, endDate);
+        Assertions.assertEquals(3, employeePayrollData.size());
     }
 }
