@@ -1,5 +1,6 @@
 package com.bl.jdbclearningproblems;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -45,6 +46,12 @@ public class EmployeePayrollService {
         if (ioService.equals(IOService.DB_IO))
             this.employeePayrollList = employeePayrollDBService.readData();
         return  this.employeePayrollList;
+    }
+
+    public List<EmployeePayrollData> readEmployeePayrollForDateChange(IOService ioService, LocalDate startDate, LocalDate endDate) {
+        if(ioService.equals(IOService.DB_IO))
+            return  employeePayrollDBService.getEmployeePayrollForDateRange(startDate,endDate);
+        return null;
     }
 
     public boolean checkEmployeePayrollInSyncWithDB(String name) {
